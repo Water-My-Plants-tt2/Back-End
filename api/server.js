@@ -7,6 +7,12 @@ server.use(express.json());
 server.use(helmet());
 server.use(cors());
 
+const plantsRouter = require("./plants/plants-router");
+const usersRouter = require("./users/users-router");
+
+server.use("/api/plants", plantsRouter);
+server.use("/api/users", usersRouter);
+
 server.get("/", (_, res) => {
   res.send("The API is running! You should go catch it! 🏃‍");
 });
