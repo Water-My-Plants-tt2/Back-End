@@ -9,7 +9,12 @@
     "server": "nodemon index.js",
     "migrate": "npx knex migrate:latest",
     "rollback": "npx knex migrate:rollback",
-    "seed": "npx knex seed:run"
+    "seed": "npx knex seed:run",
+    "migrateh":"heroku run knex migrate:latest -a greenthumbs-tt2",
+    "rollbackh":"heroku run knex migrate:rollback -a greenthumbs-tt2",
+    "databaseh":"heroku pg:psql -a greenthumbs-tt2",
+    "seedh":"heroku run knex seed:run -a greenthumbs-tt2",
+    "deploy":"git push heroku main"
   },
   "repository": {
     "type": "git",
