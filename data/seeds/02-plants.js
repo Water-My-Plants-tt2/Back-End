@@ -1,8 +1,8 @@
 exports.seed = function (knex) {
-  return knex("table_name")
+  return knex("plants")
     .truncate()
     .then(function () {
-      return knex("table_name").insert([
+      return knex("plants").insert([
         {
           id: 1,
           nickname: "rich",
@@ -19,7 +19,7 @@ exports.seed = function (knex) {
         },
         {
           id: 3,
-          nickname: "Yggdrasill",
+          nickname: "yggdrasill",
           species: "world tree",
           h2oFrequency: "bi-millennial",
           user_id: 2,
