@@ -1,14 +1,10 @@
-require("dotenv").config();
-const pg = require("pg");
-const pgConnection = `${process.env.DATABASE_URL}?sslmode=require`;
+require('dotenv').config();
+const pgConnection = `${process.env.PRODUCTION_DATABASE_URL}?sslmode=require`;
 
-if (process.env.DATABASE_URL) {
-  pg.defaults.ssl = { rejectUnauthorized: false };
-}
 const sharedConfig = {
-  client: "pg",
-  migrations: { directory: "./data/migrations" },
-  seeds: { directory: "./data/seeds" },
+  client: 'pg',
+  migrations: { directory: './data/migrations' },
+  seeds: { directory: './data/seeds' },
 };
 
 module.exports = {
