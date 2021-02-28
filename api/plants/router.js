@@ -10,7 +10,7 @@ const {
 } = require('../middleware/idValidaters');
 const { plantChecker } = require('../middleware/payloadCheckers');
 
-router.get('/:id', validateUserId, (req, res) => {
+router.get('/:id', validateUserId, gatekeeper, (req, res) => {
   const { id } = req.params;
 
   Plants.getById(id)
