@@ -25,7 +25,7 @@ describe("Server Tests", () => {
   });
 });
 
-describe("User Endpoint Testing", () => {
+describe("Endpoint Testing", () => {
   // DB set up
   beforeAll(async () => {
     await db.migrate.rollback();
@@ -48,5 +48,22 @@ describe("User Endpoint Testing", () => {
       // can't connect to test db atm
       // seed users, check for users
     });
+  });
+  describe("[GET] /api/users/:id", () => {
+    it("Returns specific user", async () => {
+      // need test db running
+      // const id = 1;
+      // const response = await request(server).get(`/api/user/${id}`);
+      // expect(response.username).toBe("Tommy Tutone");
+    });
+    it("Returns error if not found", async () => {
+      // need test db running
+      // const id = 999;
+      // const response = await request(server).get(`/api/user/${id}`);
+      // expect(response.username).toBe("Tommy Tutone");
+    });
+  });
+  describe("[GET] /api/plants/:id", () => {
+    it("Get plants belonging to user", async () => {});
   });
 });
