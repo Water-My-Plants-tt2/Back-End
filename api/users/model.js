@@ -6,7 +6,6 @@ module.exports = {
   getByUsername,
   addUser,
   editUser,
-  // editPhoneNumber,
 };
 
 function getAll() {

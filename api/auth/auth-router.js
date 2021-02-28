@@ -11,6 +11,7 @@ const {
 } = require('../middleware/payloadCheckers');
 const usernameDupeChecker = require('../middleware/usernameDupeChecker');
 const gatekeeper = require('../middleware/gatekeeper');
+const validateUserId = require('../middleware/validateUserId');
 
 router.post('/register', registerChecker, usernameDupeChecker, (req, res) => {
   let newUser = req.body;
@@ -38,19 +39,25 @@ router.post('/login', loginChecker, async (req, res) => {
   }
 });
 
-router.put('/:id/update', editChecker, gatekeeper, (req, res) => {
-  const { id } = req.params;
-  let changes = req.body;
-  const hashedPass = bcrypt.hashSync(changes.password, 8);
-  changes.password = hashedPass;
+router.put(
+  '/:id/update',
+  validateUserId,
+  editChecker,
+  gatekeeper,
+  (req, res) => {
+    const { id } = req.params;
+    let changes = req.body;
+    const hashedPass = bcrypt.hashSync(changes.password, 8);
+    changes.password = hashedPass;
 
-  Users.editUser(changes, id)
-    .then(() => {
-      res.status(200).json({ message: 'User updated successfully' });
-    })
-    .catch((e) => {
-      return res.status(500).json(e.message);
-    });
-});
+    Users.editUser(changes, id)
+      .then(() => {
+        res.status(200).json({ message: 'User updated successfully' });
+      })
+      .catch((e) => {
+        return res.status(500).json(e.message);
+      });
+  },
+);
 
 module.exports = router;

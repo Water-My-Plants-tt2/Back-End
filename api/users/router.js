@@ -27,19 +27,4 @@ router.get('/:id', validateUserId, (req, res) => {
     });
 });
 
-// Under construction
-
-// router.put('/:id', validateUserId, (req, res) => {
-//   const { id } = req.params;
-//   const changes = req.body;
-
-//   Users.editpassword(changes, id)
-//     .then(() => {
-//       res.status(200).json({ message: 'User updated' });
-//     })
-//     .catch((e) => {
-//       res.status(500).json({ error: e, message: e.message });
-//     });
-// });
-
 module.exports = router;
