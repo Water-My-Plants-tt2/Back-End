@@ -5,7 +5,7 @@ module.exports = {
   getById,
   getByUsername,
   addUser,
-  editPassword,
+  editUser,
   // editPhoneNumber,
 };
 
@@ -24,7 +24,7 @@ function getById(id) {
 
 function getByUsername(username) {
   return db('users')
-    .where('username', username)
+    .where({ username: username })
     .select('username', 'password')
     .first();
 }
@@ -34,6 +34,6 @@ async function addUser(user) {
   return getById(id);
 }
 
-function editPassword(change, id) {
-  return db('users').where({ user_id: id }).update(change);
+function editUser(changes, id) {
+  return db('users').where({ user_id: id }).update(changes);
 }

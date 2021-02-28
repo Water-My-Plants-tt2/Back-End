@@ -3,8 +3,7 @@ const Users = require('../users/model');
 module.exports = {
   registerChecker,
   loginChecker,
-  passwordEditChecker,
-  phoneNumberEditChecker,
+  editChecker,
 };
 
 function registerChecker(req, res, next) {
@@ -24,26 +23,16 @@ function loginChecker(req, res, next) {
 
   if (!username || !password) {
     res.status(400).json({
-      message: 'username and password required',
+      message: 'Username and password required',
     });
   } else {
     next();
   }
 }
 
-function passwordEditChecker(req, res, next) {
-  if (!req.body.password) {
-    res.status(400).json({ message: 'Password required' });
-  } else {
-    next();
-  }
-}
-
-function phoneNumberEditChecker(req, res, next) {
-  if (!req.body.phone_number) {
-    res
-      .status(400)
-      .json({ message: 'Please provide a valid 9 digit phone number' });
+function editChecker(req, res, next) {
+  if (!req.body.password || !req.body.phone_number) {
+    res.status(400).json({ message: 'Password and phone number required' });
   } else {
     next();
   }
