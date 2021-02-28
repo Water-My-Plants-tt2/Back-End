@@ -1,5 +1,3 @@
-const Users = require('../users/model');
-
 module.exports = {
   registerChecker,
   loginChecker,
