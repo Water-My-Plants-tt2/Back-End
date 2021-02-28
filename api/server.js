@@ -7,7 +7,7 @@ server.use(express.json());
 server.use(helmet());
 server.use(cors());
 
-const plantsRouter = require('./plants/plants-router');
+const plantsRouter = require('./plants/router');
 const usersRouter = require('./users/router');
 const authRouter = require('./auth/auth-router');
 

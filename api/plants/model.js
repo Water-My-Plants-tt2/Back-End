@@ -1,0 +1,38 @@
+const db = require('../../data/dbConfig');
+
+module.exports = {
+  getById,
+  getByPlantId,
+  addPlant,
+  editPlant,
+  deletePlant,
+};
+
+function getById(id) {
+  return db('users as u')
+    .join('plants as p', 'u.user_id', 'p.user_id')
+    .select(
+      'u.user_id',
+      'p.plant_id',
+      'p.nickname',
+      'p.species',
+      'p.h2oFrequency',
+    )
+    .where('u.user_id', id);
+}
+
+function getByPlantId(id) {
+  return db('plants').where({ plant_id: id }).first();
+}
+
+function addPlant(plant) {
+  return db('plants').insert(plant);
+}
+
+function editPlant(changes, id) {
+  return db('plants').where({ plant_id: id }).update(changes);
+}
+
+function deletePlant(id) {
+  return db('plants').where({ plant_id: id }).del();
+}

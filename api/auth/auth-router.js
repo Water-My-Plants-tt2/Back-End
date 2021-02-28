@@ -4,14 +4,15 @@ const bcrypt = require('bcryptjs');
 const jrrTokenMaker = require('../../utils/jrrTokenMaker');
 const Users = require('../users/model');
 
+// Middleware
 const {
   registerChecker,
   loginChecker,
-  editChecker,
+  userEditChecker,
 } = require('../middleware/payloadCheckers');
 const usernameDupeChecker = require('../middleware/usernameDupeChecker');
 const gatekeeper = require('../middleware/gatekeeper');
-const validateUserId = require('../middleware/validateUserId');
+const { validateUserId } = require('../middleware/idValidaters');
 
 router.post('/register', registerChecker, usernameDupeChecker, (req, res) => {
   let newUser = req.body;
@@ -42,7 +43,7 @@ router.post('/login', loginChecker, async (req, res) => {
 router.put(
   '/:id/update',
   validateUserId,
-  editChecker,
+  userEditChecker,
   gatekeeper,
   (req, res) => {
     const { id } = req.params;
