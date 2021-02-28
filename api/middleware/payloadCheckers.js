@@ -1,7 +1,8 @@
 module.exports = {
   registerChecker,
   loginChecker,
-  editChecker,
+  userEditChecker,
+  plantChecker,
 };
 
 function registerChecker(req, res, next) {
@@ -21,16 +22,27 @@ function loginChecker(req, res, next) {
 
   if (!username || !password) {
     res.status(400).json({
-      message: 'Username and password required',
+      message: 'username and password required',
     });
   } else {
     next();
   }
 }
 
-function editChecker(req, res, next) {
+function userEditChecker(req, res, next) {
   if (!req.body.password || !req.body.phone_number) {
-    res.status(400).json({ message: 'Password and phone number required' });
+    res.status(400).json({ message: 'password and phone_number required' });
+  } else {
+    next();
+  }
+}
+
+function plantChecker(req, res, next) {
+  const { nickname, species, h2oFrequency } = req.body;
+  if (!nickname || !species || !h2oFrequency) {
+    res.status(400).json({
+      message: 'nickname, species, and h2oFrequency required',
+    });
   } else {
     next();
   }

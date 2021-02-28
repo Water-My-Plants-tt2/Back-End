@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 const Users = require('./model');
-const validateUserId = require('../middleware/validateUserId');
 
-// user can update phone # and password
+// Middleware
+const { validateUserId } = require('../middleware/idValidaters');
+
 router.get('/', (_, res) => {
   Users.getAll()
     .then((users) => {
