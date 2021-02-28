@@ -10,7 +10,7 @@ function registerChecker(req, res, next) {
 
   if (!username || !password || !phone_number) {
     res.status(400).json({
-      message: 'username, password, and phone number required',
+      message: 'username, password, and phone_number required',
     });
   } else {
     next();
@@ -38,8 +38,8 @@ function userEditChecker(req, res, next) {
 }
 
 function plantChecker(req, res, next) {
-  const { nickname, species, h2oFrequency } = req.body;
-  if (!nickname || !species || !h2oFrequency) {
+  const { nickname, species, h2oFrequency, user_id } = req.body;
+  if (!nickname || !species || !h2oFrequency || !user_id) {
     res.status(400).json({
       message: 'nickname, species, and h2oFrequency required',
     });
