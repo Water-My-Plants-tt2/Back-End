@@ -22,21 +22,15 @@ router.get('/:id', validateUserId, (req, res) => {
     });
 });
 
-router.post(
-  '/add/:id',
-  validateUserId,
-  plantChecker,
-  gatekeeper,
-  (req, res) => {
-    Plants.addPlant(req.body)
-      .then(() => {
-        return res.status(201).json({ message: 'Plant added successfully' });
-      })
-      .catch((e) => {
-        return res.status(500).json(e.message);
-      });
-  },
-);
+router.post('/:id', validateUserId, plantChecker, gatekeeper, (req, res) => {
+  Plants.addPlant(req.body)
+    .then(() => {
+      return res.status(201).json({ message: 'Plant added successfully' });
+    })
+    .catch((e) => {
+      return res.status(500).json(e.message);
+    });
+});
 
 router.put('/:id', validatePlantId, plantChecker, gatekeeper, (req, res) => {
   const { id } = req.params;
