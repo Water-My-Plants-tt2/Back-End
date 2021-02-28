@@ -24,8 +24,8 @@ function getById(id) {
 
 function getByUsername(username) {
   return db('users')
-    .select('user_id', 'username', 'phone_number')
     .where('username', username)
+    .select('username', 'password')
     .first();
 }
 
