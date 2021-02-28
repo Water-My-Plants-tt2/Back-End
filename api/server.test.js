@@ -2,7 +2,16 @@ const request = require("supertest");
 const server = require("./server");
 const db = require("../data/dbConfig");
 
+const hamburglar = {
+  username: "notathief",
+  password: "hamburgers",
+  phone_number: 123456789,
+};
+
 describe("Server Tests", () => {
+  it("Sanity Check", () => {
+    expect(true).toEqual(true);
+  });
   it("Check for correct testing environment", () => {
     expect(process.env.NODE_ENV).toBe("testing");
   });
@@ -13,5 +22,31 @@ describe("Server Tests", () => {
   it("Server catch all 404 on unknown resource", async () => {
     const response = await request(server).get(`/${Math.random()}`);
     expect(response.status).toBe(404);
+  });
+});
+
+describe("User Endpoint Testing", () => {
+  // DB set up
+  beforeAll(async () => {
+    await db.migrate.rollback();
+    await db.migrate.latest();
+  });
+  beforeEach(async () => {
+    await db("users").truncate;
+  });
+  afterAll(async () => {
+    await db.destroy();
+  });
+
+  describe("[GET] /api/users", () => {
+    it("Responds if empty", async () => {
+      const response = await request(server).get("/api/users");
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual([]);
+    });
+    it("Gets all users if exist", async () => {
+      // can't connect to test db atm
+      // seed users, check for users
+    });
   });
 });
