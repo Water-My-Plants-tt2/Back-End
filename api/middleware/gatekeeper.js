@@ -7,12 +7,12 @@ module.exports = (req, res, next) => {
   if (token) {
     jwt.verify(token, jwtSecret, (err) => {
       if (err) {
-        res.status(401).json('Token invalid');
+        res.status(401).json({ message: 'Token invalid' });
       } else {
         next();
       }
     });
   } else {
-    res.status(401).json('No Token');
+    res.status(401).json({ message: 'No token' });
   }
 };

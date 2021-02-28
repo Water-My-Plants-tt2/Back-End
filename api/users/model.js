@@ -3,9 +3,9 @@ const db = require('../../data/dbConfig');
 module.exports = {
   getAll,
   getById,
-  getBy,
+  getByUsername,
   addUser,
-  editPassword,
+  editUser,
   // editPhoneNumber,
 };
 
@@ -22,24 +22,18 @@ function getById(id) {
     .first();
 }
 
-function getBy(filter) {
+function getByUsername(username) {
   return db('users')
-    .select('user_id', 'username', 'phone_number')
-    .where({ username: filter })
+    .where({ username: username })
+    .select('username', 'password')
     .first();
 }
 
-function addUser(user) {
-  db('users')
-    .insert(user)
-    .then((user) => {
-      return getById(user.user_id);
-    })
-    .catch((e) => {
-      return e;
-    });
+async function addUser(user) {
+  const [id] = await db('users').insert(user, 'user_id');
+  return getById(id);
 }
 
-function editPassword(change, id) {
-  return db('users').where({ user_id: id }).update(change);
+function editUser(changes, id) {
+  return db('users').where({ user_id: id }).update(changes);
 }
