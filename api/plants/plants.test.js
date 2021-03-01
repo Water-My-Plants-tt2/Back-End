@@ -9,6 +9,12 @@ const groot = {
   phone_number: 880070088,
 };
 
+const tommy = {
+  username: "Tommy Tutone",
+  password: "comebackjenny",
+  phone_number: 3248675392,
+};
+
 describe("Plant Endpoint Testing", () => {
   // DB set up
   beforeAll(async () => {
@@ -25,10 +31,19 @@ describe("Plant Endpoint Testing", () => {
   });
   describe("[GET] /api/plants/:id", () => {
     it("Get plants belonging to user", async () => {
-      // need test db running
+      const id = 1;
+      await request(server).post("/api/auth/register").send(groot);
+      let response = await request(server).post("/api/auth/login").send(groot);
+      const token = response.body.token;
+      response = await request(server)
+        .get(`/api/plants/${id}`)
+        .set({ Authorization: token });
+      expect(response.body).toHaveLength(0);
     });
-    it("Returns Error if user not found", () => {
-      // need test db running
+    it("Returns Error if user not found", async () => {
+      const id = 999;
+      const response = await request(server).get(`/api/plants/${id}`);
+      expect(response.status).toBe(400);
     });
   });
 });
