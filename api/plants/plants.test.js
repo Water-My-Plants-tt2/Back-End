@@ -1,18 +1,11 @@
 const request = require("supertest");
 const server = require("../server");
 const db = require("../../data/dbConfig");
-const Plant = require("./model");
 
 const groot = {
   username: "groot",
   password: "iamgroot",
   phone_number: 880070088,
-};
-
-const tommy = {
-  username: "Tommy Tutone",
-  password: "comebackjenny",
-  phone_number: 3248675392,
 };
 
 describe("Plant Endpoint Testing", () => {

@@ -45,22 +45,44 @@ describe("Auth Endpoint Testing", () => {
       expect(response.text).toBe('{"message":"Invalid Credentials"}');
     });
     it("Login success returns token/msg", async () => {
-      // await request(server).post("/api/auth/register").send(nathan);
-      const response = await request(server)
-        .post("api/auth/login")
-        .send({ username: nathan.username, password: nathan.password });
-      console.log(response);
-      expect(response.status).toBe(200);
-      // expect(response.text).toContain(/login successful/i);
-      // expect(response.body).toContain(/token/i);
-      // console.log(response);
+      await db.seed.run(nathan);
+      const res = await request(server).post("/api/auth/login").send(nathan);
+      expect(res.body.message).toContain("Welcome Back");
     });
   });
 
-  describe("Test [PUT] /api/auth/:id/login", () => {
-    it("Won't update without valid token", async () => {});
+  describe("Test [PUT] /api/auth/:id/update", () => {
+    it("Won't update without valid token", async () => {
+      const id = 1;
+      const changes = {
+        password: "newpass",
+        phone_number: "223456789",
+      };
+      await request(server).post("/api/auth/register").send(nathan);
+      let response = await request(server).post("/api/auth/login").send(nathan);
+      response = await request(server)
+        .put(`/api/auth/${id}/update`)
+        .send(changes);
+      expect(response.status).toBe(401);
+      expect(response.text).toBe('{"message":"No token"}');
+    });
     it("Returns message on success", async () => {
-      // "message": "User updated successfully"
+      const id = 1;
+      const changes = {
+        password: "newpass",
+        phone_number: "223456789",
+      };
+      await request(server).post("/api/auth/register").send(nathan);
+      let response = await request(server)
+        .post("/api/auth/login")
+        .send({ username: nathan.username, password: nathan.password });
+      const token = response.body.token;
+      response = await request(server)
+        .put(`/api/auth/${id}/update`)
+        .send(changes)
+        .set({ Authorization: token });
+      expect(response.status).toBe(200);
+      expect(response.text).toBe('{"message":"User updated successfully"}');
     });
   });
 });
