@@ -5,7 +5,6 @@ const path = require("path");
 
 const PORT = process.env.PORT || 5678;
 
-// testing server/path/new PORT
 server.use(express.static(path.join(__dirname, "client/dist")));
 
 server.listen(PORT, () => {
