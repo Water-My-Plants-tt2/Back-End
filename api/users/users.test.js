@@ -1,7 +1,6 @@
 const request = require("supertest");
 const server = require("../server");
 const db = require("../../data/dbConfig");
-const User = require("./model");
 
 const Optimus = {
   username: "Optimus Prime",
@@ -33,24 +32,23 @@ describe("User Endpoint Testing", () => {
       expect(response.body).toEqual([]);
     });
     it("Gets all users if exist", async () => {
-      // can't connect to test db atm
-      // seed users, check for users
+      // regular seed
+      // const response = await request(server).get("/api/users");
+      // expect(response.body).toHaveLength(3);
     });
   });
   describe("[GET] /api/users/:id", () => {
     it("Returns specific user", async () => {
       expect(true).toBe(true);
-      // need test db running
+      // seed optimus
       // const id = 1;
       // const response = await request(server).get(`/api/user/${id}`);
-      // expect(response.username).toBe("Tommy Tutone");
+      // expect(response.username).toBe("Optimus Prime");
     });
     it("Returns error if not found", async () => {
-      expect(true).toBe(true);
-      // need test db running
-      // const id = 999;
-      // const response = await request(server).get(`/api/user/${id}`);
-      // expect(response.username).toBe("Tommy Tutone");
+      const id = 999;
+      const response = await request(server).get(`/api/user/${id}`);
+      expect(response.text).toBe('{"message":"404: Resource not found"}');
     });
   });
 });
