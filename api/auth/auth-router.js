@@ -14,19 +14,24 @@ const usernameDupeChecker = require("../middleware/usernameDupeChecker");
 const gatekeeper = require("../middleware/gatekeeper");
 const { validateUserId } = require("../middleware/idValidaters");
 
-router.post("/register", registerChecker, usernameDupeChecker, (req, res) => {
-  let newUser = req.body;
-  const hashedPass = bcrypt.hashSync(newUser.password, 8);
-  newUser.password = hashedPass;
+router.post(
+  "/register",
+  registerChecker,
+  usernameDupeChecker,
+  (req, res, next) => {
+    let newUser = req.body;
+    const hashedPass = bcrypt.hashSync(newUser.password, 8);
+    newUser.password = hashedPass;
 
-  Users.addUser(newUser)
-    .then(addedUser => {
-      return res.status(201).json(addedUser);
-    })
-    .catch(e => {
-      return res.status(500).json(e.message);
-    });
-});
+    Users.addUser(newUser)
+      .then(addedUser => {
+        return res.status(201).json(addedUser);
+      })
+      .catch(e => {
+        next(e);
+      });
+  }
+);
 
 router.post("/login", loginChecker, async (req, res) => {
   const { username, password } = req.body;
@@ -45,7 +50,7 @@ router.put(
   validateUserId,
   userEditChecker,
   gatekeeper,
-  (req, res) => {
+  (req, res, next) => {
     const { id } = req.params;
     let changes = req.body;
     const hashedPass = bcrypt.hashSync(changes.password, 8);
@@ -56,9 +61,17 @@ router.put(
         res.status(200).json({ message: "User updated successfully" });
       })
       .catch(e => {
-        return res.status(500).json(e.message);
+        next(e);
       });
   }
 );
+
+router.use((error, req, res, next) => {
+  res.status(500).json({
+    info: "Error occurred inside authRouter",
+    message: error.message,
+    stack: error.stack,
+  });
+});
 
 module.exports = router;
