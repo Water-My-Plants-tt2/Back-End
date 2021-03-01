@@ -46,8 +46,12 @@ describe("Auth Endpoint Testing", () => {
     });
     it("Login success returns token/msg", async () => {
       await db.seed.run(nathan);
-      const res = await request(server).post("/api/auth/login").send(nathan);
-      expect(res.body.message).toContain("Welcome Back");
+      await request(server).post("/api/auth/register").send(nathan);
+      let response = await request(server)
+        .post("/api/auth/login")
+        .send({ username: nathan.username, password: nathan.password });
+      expect(response.status).toBe(200);
+      expect(response.body.message).toBe("Login Successful");
     });
   });
 
