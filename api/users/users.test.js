@@ -2,22 +2,14 @@ const request = require("supertest");
 const server = require("../server");
 const db = require("../../data/dbConfig");
 
-const Optimus = {
-  username: "Optimus Prime",
-  password: "primotech",
-  phone_number: 122333333,
-};
-
 describe("User Endpoint Testing", () => {
   // DB set up
   beforeAll(async () => {
     await db.migrate.rollback();
     await db.migrate.latest();
   });
-  beforeEach(async () => {
-    // await db("users").truncate();
-  });
   afterAll(async () => {
+    await db("users").truncate();
     await db.destroy();
   });
 
