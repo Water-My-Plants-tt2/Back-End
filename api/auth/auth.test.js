@@ -15,7 +15,7 @@ describe("Auth Endpoint Testing", () => {
     await db.migrate.latest();
   });
   beforeEach(async () => {
-    await db("users").truncate;
+    // await db("users").truncate();
   });
   afterAll(async () => {
     await db.destroy();
@@ -26,39 +26,36 @@ describe("Auth Endpoint Testing", () => {
   });
 
   describe("Test [POST] api/auth/register", () => {
-    it("Responds 201 on successful user creation", async () => {
+    it("Responds 201/ user info on successful user creation", async () => {
       const response = await request(server)
         .post("/api/auth/register")
         .send(nathan);
       expect(response.status).toBe(201);
-    });
-    it("Responds with new user data", async () => {
-      // const response = await request(server)
-      //   .post("/api/auth/register")
-      //   .send(nathan);
-      // expect(response.body.username).toBe(nathan.username);
-      // console.log(process.env.TESTING_DATABASE_URL); // shows test db 👍
-      // console.log(response.body.username); // undefined 👎
-      // console.log(process.env.NODE_ENV); // testing 👍
+      expect(response.text).toContain(
+        '{"user_id":1,"username":"nate","phone_number":"1112223333"}'
+      );
     });
   });
 
   describe("Test [POST] /api/auth/login", () => {
     it("Won't log in with invalid credentials", async () => {
-      // const response = await request(server)
-      //   .post("/api/auth/login")
-      //   .send(nathan);
-      // expect(response.status).toBe(401);
-      // expect(response.text).toContain(/invalid credentials/i);
+      nathan.password = "pizza";
+      const response = await request(server)
+        .post("/api/auth/login")
+        .send(nathan);
+      expect(response.status).toBe(401);
+      expect(response.text).toBe('{"message":"Invalid Credentials"}');
     });
     it("Login success returns token/msg", async () => {
-      // await request(server).post("/api/auth/register").send(nathan);
-      // const response = await request(server)
-      //   .post("api/auth/login")
-      //   .send(nathan);
-      // expect(response.status).toBe(200);
-      // expect(response.text).toContain(/login successful/i);
-      // expect(response.body).toContain(/token/i);
+      await request(server).post("/api/auth/register").send(nathan);
+      const response = await request(server)
+        .post("api/auth/login")
+        .send({ username: nathan.username, password: nathan.password });
+      console.log(response);
+      expect(response.status).toBe(200);
+      expect(response.text).toContain(/login successful/i);
+      expect(response.body).toContain(/token/i);
+      console.log(response);
     });
   });
 
