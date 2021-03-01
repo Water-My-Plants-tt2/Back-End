@@ -44,6 +44,7 @@ describe("Auth Endpoint Testing", () => {
       expect(response.status).toBe(401);
       expect(response.text).toBe('{"message":"Invalid Credentials"}');
     });
+
     it("Login success returns token/msg", async () => {
       await db.seed.run(nathan);
       await request(server).post("/api/auth/register").send(nathan);
@@ -70,6 +71,7 @@ describe("Auth Endpoint Testing", () => {
       expect(response.status).toBe(401);
       expect(response.text).toBe('{"message":"No token"}');
     });
+
     it("Returns message on success", async () => {
       const id = 1;
       const changes = {

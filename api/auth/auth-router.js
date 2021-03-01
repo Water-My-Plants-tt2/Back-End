@@ -1,47 +1,47 @@
-const router = require('express').Router();
-const bcrypt = require('bcryptjs');
+const router = require("express").Router();
+const bcrypt = require("bcryptjs");
 
-const jrrTokenMaker = require('../../utils/jrrTokenMaker');
-const Users = require('../users/model');
+const jrrTokenMaker = require("../../utils/jrrTokenMaker");
+const Users = require("../users/model");
 
 // Middleware
 const {
   registerChecker,
   loginChecker,
   userEditChecker,
-} = require('../middleware/payloadCheckers');
-const usernameDupeChecker = require('../middleware/usernameDupeChecker');
-const gatekeeper = require('../middleware/gatekeeper');
-const { validateUserId } = require('../middleware/idValidaters');
+} = require("../middleware/payloadCheckers");
+const usernameDupeChecker = require("../middleware/usernameDupeChecker");
+const gatekeeper = require("../middleware/gatekeeper");
+const { validateUserId } = require("../middleware/idValidaters");
 
-router.post('/register', registerChecker, usernameDupeChecker, (req, res) => {
+router.post("/register", registerChecker, usernameDupeChecker, (req, res) => {
   let newUser = req.body;
   const hashedPass = bcrypt.hashSync(newUser.password, 8);
   newUser.password = hashedPass;
 
   Users.addUser(newUser)
-    .then((addedUser) => {
+    .then(addedUser => {
       return res.status(201).json(addedUser);
     })
-    .catch((e) => {
+    .catch(e => {
       return res.status(500).json(e.message);
     });
 });
 
-router.post('/login', loginChecker, async (req, res) => {
+router.post("/login", loginChecker, async (req, res) => {
   const { username, password } = req.body;
   const tryUser = await Users.getByUsername(username);
 
   if (tryUser && bcrypt.compareSync(password, tryUser.password)) {
     const token = jrrTokenMaker(tryUser);
-    res.status(200).json({ message: 'Login Successful', token });
+    res.status(200).json({ message: "Login Successful", token });
   } else {
-    res.status(401).json({ message: 'Invalid Credentials' });
+    res.status(401).json({ message: "Invalid Credentials" });
   }
 });
 
 router.put(
-  '/:id/update',
+  "/:id/update",
   validateUserId,
   userEditChecker,
   gatekeeper,
@@ -53,12 +53,12 @@ router.put(
 
     Users.editUser(changes, id)
       .then(() => {
-        res.status(200).json({ message: 'User updated successfully' });
+        res.status(200).json({ message: "User updated successfully" });
       })
-      .catch((e) => {
+      .catch(e => {
         return res.status(500).json(e.message);
       });
-  },
+  }
 );
 
 module.exports = router;
