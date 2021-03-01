@@ -16,7 +16,7 @@ describe("Plant Endpoint Testing", () => {
     await db.migrate.latest();
   });
   beforeEach(async () => {
-    await db("plants").truncate;
+    await db("plants").truncate();
   });
   afterAll(async () => {
     await db.destroy();

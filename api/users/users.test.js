@@ -15,7 +15,7 @@ describe("User Endpoint Testing", () => {
     await db.migrate.latest();
   });
   beforeEach(async () => {
-    await db("users").truncate;
+    // await db("users").truncate();
   });
   afterAll(async () => {
     await db.destroy();
@@ -32,18 +32,17 @@ describe("User Endpoint Testing", () => {
       expect(response.body).toEqual([]);
     });
     it("Gets all users if exist", async () => {
-      // regular seed
-      // const response = await request(server).get("/api/users");
-      // expect(response.body).toHaveLength(3);
+      await db.seed.run();
+      const response = await request(server).get("/api/users");
+      expect(response.body).toHaveLength(3);
     });
   });
   describe("[GET] /api/users/:id", () => {
     it("Returns specific user", async () => {
-      expect(true).toBe(true);
-      // seed optimus
-      // const id = 1;
-      // const response = await request(server).get(`/api/user/${id}`);
-      // expect(response.username).toBe("Optimus Prime");
+      await db.seed.run();
+      const id = 1;
+      const response = await request(server).get(`/api/users/${id}`);
+      expect(response.status).toBe(200);
     });
     it("Returns error if not found", async () => {
       const id = 999;
