@@ -39,7 +39,9 @@ router.post("/login", loginChecker, async (req, res) => {
 
   if (tryUser && bcrypt.compareSync(password, tryUser.password)) {
     const token = jrrTokenMaker(tryUser);
-    res.status(200).json({ message: "Login Successful", token });
+    res
+      .status(200)
+      .json({ message: "Login Successful", token, user_id: tryUser.user_id });
   } else {
     res.status(401).json({ message: "Invalid Credentials" });
   }
