@@ -25,8 +25,9 @@ function getByPlantId(id) {
   return db('plants').where({ plant_id: id }).first();
 }
 
-function addPlant(plant) {
-  return db('plants').insert(plant);
+async function addPlant(plant) {
+  const [id] = await db('plants').insert(plant, 'plant_id');
+  return getByPlantId(id);
 }
 
 function editPlant(changes, id) {
