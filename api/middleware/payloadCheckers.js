@@ -41,7 +41,8 @@ function plantChecker(req, res, next) {
   const { nickname, species, h2oFrequency, user_id } = req.body;
   if (!nickname || !species || !h2oFrequency || !user_id) {
     res.status(400).json({
-      message: 'nickname, species, and h2oFrequency required',
+      message:
+        'nickname, species, h2oFrequency, and the user_id of my creator is required',
     });
   } else {
     next();
